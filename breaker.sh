@@ -116,7 +116,7 @@ GIT_VERBOSITY=''
 [[ "${#TARGET[@]}" -eq 0 ]] && error_message && short_help && exit 1
 
 info "Pre-breaking"
-for (( i = 0; i <= N_PRE; i++ ))
+for (( i = 0; i < N_PRE; i++ ))
 do
 	for f in "${TARGET[@]}"
 	do
@@ -140,7 +140,7 @@ do
 done
 
 info "Post-breaking"
-for (( i = 0; i <= N_POST; i++ ))
+for (( i = 0; i < N_POST; i++ ))
 do
 	for f in "${TARGET[@]}"
 	do
