@@ -1,5 +1,6 @@
 #!/bin/bash
 
+M_INVALID_USAGE="Invalid usage; at least one file must be specified!"
 VERBOSITY=30
 function debug() { [[ $VERBOSITY -le 10 ]] && echo "$@" ; }
 function info() { [[ $VERBOSITY -le 20 ]] && echo "$@" ; }
@@ -22,9 +23,6 @@ function help() {
 }
 function short_help() {
 	warning "Usage ./breaker.sh [-h] [options] [FILE]"
-}
-function error_message() {
-	error "Invalid usage; at least one file must be specified!"
 }
 
 
@@ -54,7 +52,7 @@ do
 			shift
 			;;
 		*)
-			error error_message
+			error $M_INVALID_USAGE
 			exit 1
 			;;
 	esac
