@@ -68,3 +68,4 @@ git bisect start
 git bisect good "$GOOD"
 git bisect bad "$BAD"
 git bisect run sh -c "$CLEAN && $COMMAND"
+git bisect reset
