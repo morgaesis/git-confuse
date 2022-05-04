@@ -1,6 +1,6 @@
 #!/bin/bash
 
-M_INVALID_USAGE="Invalid usage; at least one file must be specified!"
+M_INVALID_USAGE="Invalid usage; got unrecognized argument"
 VERBOSITY=30
 function debug() { [[ $VERBOSITY -le 10 ]] && echo "$@" ; }
 function info() { [[ $VERBOSITY -le 20 ]] && echo "$@" ; }
@@ -27,41 +27,46 @@ function short_help() {
 
 
 info "Handling options"
-while [[ $1 =~ -[a-z-] ]]
+while [[ "$1" =~ -[a-z-] ]]
 do
 	info "Handling option $1"
-	case $1 in
+	case "$1" in
 		-h|--help)
+			shift
 			help
 			exit 0
 			;;
 		--good)
-			GOOD=$1
+			shift
+			GOOD="$1"
 			shift
 			;;
 		--bad)
-			BAD=$1
+			shift
+			BAD="$1"
 			shift
 			;;
-		--comand)
-			COMMAND=$1
+		--command)
+			shift
+			COMMAND="$1"
 			shift
 			;;
 		--clean)
-			CLEAN=$1
+			CLEAN="$1"
 			shift
 			;;
 		*)
-			error $M_INVALID_USAGE
+			error "$M_INVALID_USAGE"
+			error "Invalid argument: $1"
 			exit 1
 			;;
 	esac
 done
 
-COMMAND=${COMMAND:-bazel build --spawn_strategy=standalone //src:*}
-CLEAN=${CLEAN:-bazel clean}
-GOOD=${GOOD:-$(git rev-parse origin/main)}
-BAD=${BAD:-$(git log -n 1 --format=%h)}
+COMMAND="${COMMAND:-bazel build --spawn_strategy=standalone //src:*}"
+CLEAN="${CLEAN:-bazel clean}"
+GOOD="${GOOD:-$(git rev-parse origin/main)}"
+BAD="${BAD:-$(git log -n 1 --format=%h)}"
 
 git bisect reset
 git bisect start
